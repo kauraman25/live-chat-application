@@ -17,5 +17,5 @@ ref :"Chat",
     timeStamp : true,
 });
 
-const Message  = mongoose.Model("Message", messageModel);
+const Message  = mongoose.modelodel("Message", messageModel);
 module.exports = Message;
