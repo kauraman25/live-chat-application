@@ -44,8 +44,8 @@ function Login() {
         msg: "Invalid User name or Password",
         key: Math.random(),
       });
+      setLoading(false);  // Reset loading state in case of error
     }
-    setLoading(false);
   };
 
   const signUpHandler = async () => {
@@ -81,7 +81,7 @@ function Login() {
           key: Math.random(),
         });
       }
-      setLoading(false);
+      setLoading(false);  // Reset loading state in case of error
     }
   };
 
@@ -108,8 +108,7 @@ function Login() {
               color="secondary"
               name="name"
               onKeyDown={(event) => {
-                if (event.code == "Enter") {
-                  // console.log(event);
+                if (event.code === "Enter") {
                   loginHandler();
                 }
               }}
@@ -123,8 +122,7 @@ function Login() {
               color="secondary"
               name="password"
               onKeyDown={(event) => {
-                if (event.code == "Enter") {
-                  // console.log(event);
+                if (event.code === "Enter") {
                   loginHandler();
                 }
               }}
@@ -133,9 +131,9 @@ function Login() {
               variant="outlined"
               color="secondary"
               onClick={loginHandler}
-              isLoading
+              disabled={loading}  // Disable button when loading
             >
-              Login
+              {loading ? "Logging in..." : "Login"}  {/* Change button text */}
             </Button>
             <p>
               Don't have an Account ?{" "}
@@ -148,9 +146,7 @@ function Login() {
                 Sign Up
               </span>
             </p>
-            {logInStatus ? (
-              <Toaster key={logInStatus.key} message={logInStatus.msg} />
-            ) : null}
+            {logInStatus && <Toaster key={logInStatus.key} message={logInStatus.msg} />}
           </div>
         )}
         {!showlogin && (
@@ -165,8 +161,7 @@ function Login() {
               name="name"
               helperText=""
               onKeyDown={(event) => {
-                if (event.code == "Enter") {
-                  // console.log(event);
+                if (event.code === "Enter") {
                   signUpHandler();
                 }
               }}
@@ -179,8 +174,7 @@ function Login() {
               color="secondary"
               name="email"
               onKeyDown={(event) => {
-                if (event.code == "Enter") {
-                  // console.log(event);
+                if (event.code === "Enter") {
                   signUpHandler();
                 }
               }}
@@ -194,8 +188,7 @@ function Login() {
               color="secondary"
               name="password"
               onKeyDown={(event) => {
-                if (event.code == "Enter") {
-                  // console.log(event);
+                if (event.code === "Enter") {
                   signUpHandler();
                 }
               }}
@@ -204,11 +197,12 @@ function Login() {
               variant="outlined"
               color="secondary"
               onClick={signUpHandler}
+              disabled={loading}  // Disable button when loading
             >
-              Sign Up
+              {loading ? "Signing Up..." : "Sign Up"}  {/* Change button text */}
             </Button>
             <p>
-              Already have an Account ?
+              Already have an Account ?{" "}
               <span
                 className="hyper"
                 onClick={() => {
@@ -218,9 +212,7 @@ function Login() {
                 Log in
               </span>
             </p>
-            {signInStatus ? (
-              <Toaster key={signInStatus.key} message={signInStatus.msg} />
-            ) : null}
+            {signInStatus && <Toaster key={signInStatus.key} message={signInStatus.msg} />}
           </div>
         )}
       </div>

@@ -27,22 +27,61 @@ function Groups() {
   }
 
   const user = userData.data;
+  // useEffect(() => {
+  //   console.log("Users refreshed : ", user.token);
+  //   const config = {
+  //     headers: {
+  //       Authorization: `Bearer ${user.token}`,
+  //     },
+  //   };
+
+  //   axios
+  //     .get("http://localhost:8080/chat/fetchGroups", config)
+  //     .then((response) => {
+  //       console.log("Group Data from API ", response.data);
+  //       SetGroups(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching groups:", error);
+  //     });
+  // }, [refresh]);
   useEffect(() => {
-    console.log("Users refreshed : ", user.token);
+    // Check if user data is available in localStorage
+    if (!userData) {
+      console.error("User not authenticated");
+      nav("/"); // Redirect to login or home page
+      return;
+    }
+  
+    // Extract user token for API authorization
+    const { token } = userData.data;
+  
+    // Configuration for API call
     const config = {
       headers: {
-        Authorization: `Bearer ${user.token}`,
+        Authorization: `Bearer ${token}`, // Bearer token for authentication
       },
     };
-
-    axios
-      .get("http://localhost:8080/chat/fetchGroups", config)
-      .then((response) => {
-        console.log("Group Data from API ", response.data);
-        SetGroups(response.data);
-      });
-  }, [refresh]);
-
+  
+    // Fetch groups from the API
+    const fetchGroups = async () => {
+      try {
+        console.log("Fetching groups with token:", token);
+        const response = await axios.get(
+          "http://localhost:8080/chat/fetchGroups",
+          config
+        );
+        console.log("Group Data from API:", response.data);
+        SetGroups(response.data); // Update state with groups data
+      } catch (error) {
+        console.error("Error fetching groups:", error);
+        // Optionally handle errors (e.g., show a message to the user)
+      }
+    };
+  
+    fetchGroups();
+  }, [userData, nav, refresh]); // Re-run when userData, nav, or refresh changes
+  
   return (
     <AnimatePresence>
       <motion.div
